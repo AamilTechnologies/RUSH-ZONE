@@ -285,6 +285,59 @@ particles.splice(index,1);
 
 function update(){
 
+/* TRAIL */
+
+function createTrail(){
+
+trails.push({
+
+x:player.x + 25,
+
+y:player.y + 50,
+
+size:20,
+
+alpha:1
+
+});
+
+}
+
+function drawTrail(){
+
+trails.forEach((t,index)=>{
+
+t.alpha -= 0.04;
+
+t.size -= 0.3;
+
+ctx.fillStyle =
+`rgba(0,212,255,${
+t.alpha
+})`;
+
+ctx.beginPath();
+
+ctx.arc(
+t.x,
+t.y,
+t.size,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+if(t.alpha <= 0){
+
+trails.splice(index,1);
+
+}
+
+});
+
+}
+
 ctx.clearRect(
 0,
 0,
