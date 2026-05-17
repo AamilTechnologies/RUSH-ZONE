@@ -1,147 +1,64 @@
-const canvas =
-document.getElementById("gameCanvas");
-
-const ctx =
-canvas.getContext("2d");
-
-/* CANVAS */
-
-canvas.width =
-window.innerWidth;
-
-canvas.height =
-window.innerHeight;
-
-/* SCORE */
-
-const scoreEl =
-document.getElementById("score");
-
-/* PLAYER */
-
-const player = {
-
-x:120,
-
-y:canvas.height - 170,
-
-width:60,
-height:60,
-
-color:"#00d4ff",
-
-velocityY:0,
-
-gravity:1,
-
-jump:-20,
-
-grounded:true
-
-};
-
-/* GAME */
-
-let obstacles = [];
-
-let particles = [];
-
-let score = 0;
-
-let speed = 8;
-
-let gameRunning = false;
-
-/* PARTICLES */
-
-function createParticles(x,y,color){
-
-for(let i=0;i<15;i++){
-
-particles.push({
-
-x,
-y,
-
-radius:
-Math.random()*4+2,
-
-color,
-
-velocityX:
-(Math.random()-0.5)*6,
-
-velocityY:
-(Math.random()-0.5)*6,
-
-alpha:1
-
-});
-
-}
-
-}
-
-/* OBSTACLE */
-
-function createObstacle(){
-
-obstacles.push({
-
-x:canvas.width,
-
-y:canvas.height - 150,
-
-width:50,
-height:50,
-
-color:"#ff4d6d"
-
-});
-
-}
-
-/* SPAWN */
-
-setInterval(()=>{
-
-if(gameRunning){
-
-createObstacle();
-
-}
-
-},1400);
-
-/* PLAYER */
+/* ===== PLAYER STYLE ===== */
 
 function drawPlayer(){
 
 ctx.save();
 
-ctx.shadowBlur = 25;
+ctx.shadowBlur = 35;
 
 ctx.shadowColor =
 "#00d4ff";
 
-ctx.fillStyle =
-player.color;
+/* PLAYER BODY */
 
-ctx.fillRect(
-
+const gradient =
+ctx.createLinearGradient(
 player.x,
 player.y,
-
-player.width,
-player.height
-
+player.x + player.width,
+player.y + player.height
 );
+
+gradient.addColorStop(0,"#00d4ff");
+gradient.addColorStop(1,"#7c3aed");
+
+ctx.fillStyle = gradient;
+
+/* ROUNDED PLAYER */
+
+ctx.beginPath();
+
+ctx.roundRect(
+player.x,
+player.y,
+player.width,
+player.height,
+14
+);
+
+ctx.fill();
+
+/* EYE */
+
+ctx.fillStyle = "#fff";
+
+ctx.beginPath();
+
+ctx.arc(
+player.x + 42,
+player.y + 18,
+5,
+0,
+Math.PI*2
+);
+
+ctx.fill();
 
 ctx.restore();
 
 }
 
-/* OBSTACLES */
+/* ===== OBSTACLE STYLE ===== */
 
 function drawObstacles(){
 
@@ -149,25 +66,44 @@ obstacles.forEach((obs,index)=>{
 
 obs.x -= speed;
 
+/* GLOW */
+
 ctx.save();
 
-ctx.shadowBlur = 25;
+ctx.shadowBlur = 30;
 
 ctx.shadowColor =
-"#ff4d6d";
+"#ff004c";
 
-ctx.fillStyle =
-obs.color;
+/* OBSTACLE */
 
-ctx.fillRect(
-
+const obsGradient =
+ctx.createLinearGradient(
 obs.x,
 obs.y,
-
-obs.width,
-obs.height
-
+obs.x + obs.width,
+obs.y + obs.height
 );
+
+obsGradient.addColorStop(0,"#ff004c");
+obsGradient.addColorStop(1,"#ff7b00");
+
+ctx.fillStyle =
+obsGradient;
+
+/* SPIKE */
+
+ctx.beginPath();
+
+ctx.moveTo(obs.x, obs.y + obs.height);
+
+ctx.lineTo(obs.x + obs.width/2, obs.y);
+
+ctx.lineTo(obs.x + obs.width, obs.y + obs.height);
+
+ctx.closePath();
+
+ctx.fill();
 
 ctx.restore();
 
@@ -182,11 +118,11 @@ score++;
 scoreEl.innerText =
 score;
 
-/* SPEED UP */
+/* SPEED */
 
 if(score % 5 === 0){
 
-speed += 0.5;
+speed += 0.6;
 
 }
 
@@ -213,7 +149,7 @@ obs.y
 createParticles(
 player.x,
 player.y,
-"#ff4d6d"
+"#ff004c"
 );
 
 gameOver();
@@ -224,58 +160,44 @@ gameOver();
 
 }
 
-/* PARTICLES */
+/* ===== BETTER PARTICLES ===== */
 
-function drawParticles(){
+function createParticles(x,y,color){
 
-particles.forEach((p,index)=>{
+for(let i=0;i<25;i++){
 
-p.x += p.velocityX;
+particles.push({
 
-p.y += p.velocityY;
+x,
+y,
 
-p.alpha -= 0.02;
+radius:
+Math.random()*5+2,
 
-ctx.save();
+color,
 
-ctx.globalAlpha =
-p.alpha;
+velocityX:
+(Math.random()-0.5)*10,
 
-ctx.fillStyle =
-p.color;
+velocityY:
+(Math.random()-0.5)*10,
 
-ctx.beginPath();
-
-ctx.arc(
-p.x,
-p.y,
-p.radius,
-0,
-Math.PI*2
-);
-
-ctx.fill();
-
-ctx.restore();
-
-if(p.alpha <= 0){
-
-particles.splice(index,1);
-
-}
+alpha:1
 
 });
 
 }
 
-/* STARS */
+}
 
-function drawStars(){
+/* ===== SPEED LINES ===== */
 
-for(let i=0;i<50;i++){
+function drawSpeedLines(){
+
+for(let i=0;i<20;i++){
 
 ctx.fillStyle =
-"rgba(255,255,255,0.08)";
+"rgba(255,255,255,0.05)";
 
 ctx.fillRect(
 
@@ -283,7 +205,8 @@ Math.random()*canvas.width,
 
 Math.random()*canvas.height,
 
-2,
+Math.random()*120,
+
 2
 
 );
@@ -292,7 +215,7 @@ Math.random()*canvas.height,
 
 }
 
-/* UPDATE */
+/* ===== UPDATE ===== */
 
 function update(){
 
@@ -307,10 +230,30 @@ canvas.height
 
 drawStars();
 
+drawSpeedLines();
+
 /* GROUND */
 
+const groundGradient =
+ctx.createLinearGradient(
+0,
+canvas.height-90,
+0,
+canvas.height
+);
+
+groundGradient.addColorStop(
+0,
+"#111827"
+);
+
+groundGradient.addColorStop(
+1,
+"#ff004c"
+);
+
 ctx.fillStyle =
-"#111827";
+groundGradient;
 
 ctx.fillRect(
 
@@ -322,7 +265,7 @@ canvas.width,
 
 );
 
-/* PHYSICS */
+/* PLAYER PHYSICS */
 
 player.velocityY +=
 player.gravity;
@@ -359,116 +302,3 @@ requestAnimationFrame(update);
 }
 
 }
-
-/* JUMP */
-
-function jump(){
-
-if(player.grounded){
-
-player.velocityY =
-player.jump;
-
-player.grounded =
-false;
-
-createParticles(
-player.x + 20,
-player.y + 40,
-"#00d4ff"
-);
-
-}
-
-}
-
-/* KEYBOARD */
-
-window.addEventListener(
-"keydown",
-(e)=>{
-
-if(e.code === "Space"){
-
-jump();
-
-}
-
-}
-);
-
-/* TOUCH */
-
-window.addEventListener(
-"touchstart",
-()=>{
-
-jump();
-
-}
-);
-
-/* START */
-
-function startGame(){
-
-obstacles = [];
-
-particles = [];
-
-score = 0;
-
-speed = 8;
-
-scoreEl.innerText = 0;
-
-gameRunning = true;
-
-document.getElementById(
-"startScreen"
-).style.display = "none";
-
-document.getElementById(
-"gameOver"
-).style.display = "none";
-
-update();
-
-}
-
-/* GAME OVER */
-
-function gameOver(){
-
-gameRunning = false;
-
-document.getElementById(
-"gameOver"
-).style.display = "flex";
-
-}
-
-/* BUTTONS */
-
-document.getElementById(
-"startBtn"
-).onclick = startGame;
-
-document.getElementById(
-"restartBtn"
-).onclick = startGame;
-
-/* RESIZE */
-
-window.addEventListener(
-"resize",
-()=>{
-
-canvas.width =
-window.innerWidth;
-
-canvas.height =
-window.innerHeight;
-
-}
-);
