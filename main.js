@@ -29,6 +29,8 @@ grounded:true
 
 const obstacles = [];
 
+const particles = [];
+
 /* DRAW PLAYER */
 
 function drawPlayer(){
