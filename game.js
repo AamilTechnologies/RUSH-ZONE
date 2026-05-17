@@ -274,6 +274,14 @@ obstacles.splice(index,1);
 
 score++;
 
+/* SPEED UP */
+
+if(score % 5 === 0){
+
+speed += 0.5;
+
+}
+
 scoreEl.innerText =
 score;
 
