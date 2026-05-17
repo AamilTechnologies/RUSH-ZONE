@@ -292,6 +292,24 @@ canvas.width,
 canvas.height
 );
 
+/* SCREEN SHAKE */
+
+if(shake > 0){
+
+ctx.save();
+
+ctx.translate(
+
+Math.random()*10 - 5,
+
+Math.random()*10 - 5
+
+);
+
+shake--;
+
+}
+
 /* BG */
 
 /* CYBER BACKGROUND */
