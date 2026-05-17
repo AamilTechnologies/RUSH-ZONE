@@ -472,6 +472,8 @@ player.grounded = true;
 
 drawPlayer();
 
+drawParticles();
+
 drawObstacles();
 
 requestAnimationFrame(update);
