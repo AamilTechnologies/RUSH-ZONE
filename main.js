@@ -285,6 +285,27 @@ particles.splice(index,1);
 
 function update(){
 
+/* SPEED LINES */
+
+for(let i=0;i<25;i++){
+
+ctx.fillStyle =
+"rgba(0,212,255,0.12)";
+
+ctx.fillRect(
+
+Math.random()*canvas.width,
+
+Math.random()*canvas.height,
+
+Math.random()*120,
+
+2
+
+);
+
+}
+
 /* TRAIL */
 
 function createTrail(){
