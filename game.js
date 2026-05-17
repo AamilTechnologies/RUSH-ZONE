@@ -1,17 +1,13 @@
-/* ===== PLAYER STYLE ===== */
-
 function drawPlayer(){
 
 ctx.save();
 
 ctx.shadowBlur = 35;
+ctx.shadowColor = "#00d4ff";
 
-ctx.shadowColor =
-"#00d4ff";
+/* BODY */
 
-/* PLAYER BODY */
-
-const gradient =
+const bodyGradient =
 ctx.createLinearGradient(
 player.x,
 player.y,
@@ -19,35 +15,79 @@ player.x + player.width,
 player.y + player.height
 );
 
-gradient.addColorStop(0,"#00d4ff");
-gradient.addColorStop(1,"#7c3aed");
+bodyGradient.addColorStop(0,"#00d4ff");
+bodyGradient.addColorStop(1,"#7c3aed");
 
-ctx.fillStyle = gradient;
+ctx.fillStyle = bodyGradient;
 
-/* ROUNDED PLAYER */
+/* HEAD */
 
 ctx.beginPath();
 
-ctx.roundRect(
-player.x,
-player.y,
-player.width,
-player.height,
-14
+ctx.arc(
+player.x + 30,
+player.y + 22,
+18,
+0,
+Math.PI*2
 );
 
 ctx.fill();
 
-/* EYE */
+/* BODY */
+
+ctx.fillRect(
+player.x + 18,
+player.y + 38,
+24,
+34
+);
+
+/* ARMS */
+
+ctx.lineWidth = 6;
+ctx.strokeStyle = "#00d4ff";
+
+ctx.beginPath();
+
+ctx.moveTo(player.x + 18, player.y + 45);
+ctx.lineTo(player.x + 5, player.y + 58);
+
+ctx.moveTo(player.x + 42, player.y + 45);
+ctx.lineTo(player.x + 55, player.y + 58);
+
+ctx.stroke();
+
+/* LEGS */
+
+ctx.beginPath();
+
+ctx.moveTo(player.x + 24, player.y + 72);
+ctx.lineTo(player.x + 18, player.y + 92);
+
+ctx.moveTo(player.x + 36, player.y + 72);
+ctx.lineTo(player.x + 42, player.y + 92);
+
+ctx.stroke();
+
+/* EYES */
 
 ctx.fillStyle = "#fff";
 
 ctx.beginPath();
 
 ctx.arc(
-player.x + 42,
-player.y + 18,
-5,
+player.x + 24,
+player.y + 20,
+2,
+0,
+Math.PI*2
+);
+
+ctx.arc(
+player.x + 36,
+player.y + 20,
+2,
 0,
 Math.PI*2
 );
@@ -55,250 +95,5 @@ Math.PI*2
 ctx.fill();
 
 ctx.restore();
-
-}
-
-/* ===== OBSTACLE STYLE ===== */
-
-function drawObstacles(){
-
-obstacles.forEach((obs,index)=>{
-
-obs.x -= speed;
-
-/* GLOW */
-
-ctx.save();
-
-ctx.shadowBlur = 30;
-
-ctx.shadowColor =
-"#ff004c";
-
-/* OBSTACLE */
-
-const obsGradient =
-ctx.createLinearGradient(
-obs.x,
-obs.y,
-obs.x + obs.width,
-obs.y + obs.height
-);
-
-obsGradient.addColorStop(0,"#ff004c");
-obsGradient.addColorStop(1,"#ff7b00");
-
-ctx.fillStyle =
-obsGradient;
-
-/* SPIKE */
-
-ctx.beginPath();
-
-ctx.moveTo(obs.x, obs.y + obs.height);
-
-ctx.lineTo(obs.x + obs.width/2, obs.y);
-
-ctx.lineTo(obs.x + obs.width, obs.y + obs.height);
-
-ctx.closePath();
-
-ctx.fill();
-
-ctx.restore();
-
-/* REMOVE */
-
-if(obs.x + obs.width < 0){
-
-obstacles.splice(index,1);
-
-score++;
-
-scoreEl.innerText =
-score;
-
-/* SPEED */
-
-if(score % 5 === 0){
-
-speed += 0.6;
-
-}
-
-}
-
-/* COLLISION */
-
-if(
-
-player.x <
-obs.x + obs.width &&
-
-player.x + player.width >
-obs.x &&
-
-player.y <
-obs.y + obs.height &&
-
-player.y + player.height >
-obs.y
-
-){
-
-createParticles(
-player.x,
-player.y,
-"#ff004c"
-);
-
-gameOver();
-
-}
-
-});
-
-}
-
-/* ===== BETTER PARTICLES ===== */
-
-function createParticles(x,y,color){
-
-for(let i=0;i<25;i++){
-
-particles.push({
-
-x,
-y,
-
-radius:
-Math.random()*5+2,
-
-color,
-
-velocityX:
-(Math.random()-0.5)*10,
-
-velocityY:
-(Math.random()-0.5)*10,
-
-alpha:1
-
-});
-
-}
-
-}
-
-/* ===== SPEED LINES ===== */
-
-function drawSpeedLines(){
-
-for(let i=0;i<20;i++){
-
-ctx.fillStyle =
-"rgba(255,255,255,0.05)";
-
-ctx.fillRect(
-
-Math.random()*canvas.width,
-
-Math.random()*canvas.height,
-
-Math.random()*120,
-
-2
-
-);
-
-}
-
-}
-
-/* ===== UPDATE ===== */
-
-function update(){
-
-ctx.clearRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
-/* BG */
-
-drawStars();
-
-drawSpeedLines();
-
-/* GROUND */
-
-const groundGradient =
-ctx.createLinearGradient(
-0,
-canvas.height-90,
-0,
-canvas.height
-);
-
-groundGradient.addColorStop(
-0,
-"#111827"
-);
-
-groundGradient.addColorStop(
-1,
-"#ff004c"
-);
-
-ctx.fillStyle =
-groundGradient;
-
-ctx.fillRect(
-
-0,
-canvas.height-90,
-
-canvas.width,
-90
-
-);
-
-/* PLAYER PHYSICS */
-
-player.velocityY +=
-player.gravity;
-
-player.y +=
-player.velocityY;
-
-/* GROUND */
-
-if(player.y >=
-canvas.height - 170){
-
-player.y =
-canvas.height - 170;
-
-player.grounded = true;
-
-}
-
-/* DRAW */
-
-drawPlayer();
-
-drawObstacles();
-
-drawParticles();
-
-/* LOOP */
-
-if(gameRunning){
-
-requestAnimationFrame(update);
-
-}
 
 }
