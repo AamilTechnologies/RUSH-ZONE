@@ -491,6 +491,8 @@ if(player.grounded){
 player.velocityY =
 player.jump;
 
+createParticles();
+
 player.grounded =
 false;
 
