@@ -229,7 +229,28 @@ canvas.height
 
 /* BG */
 
-ctx.fillStyle = "#050816";
+/* CYBER BACKGROUND */
+
+const skyGradient =
+ctx.createLinearGradient(
+0,
+0,
+0,
+canvas.height
+);
+
+skyGradient.addColorStop(
+0,
+"#08111f"
+);
+
+skyGradient.addColorStop(
+1,
+"#050816"
+);
+
+ctx.fillStyle =
+skyGradient;
 
 ctx.fillRect(
 0,
@@ -237,6 +258,117 @@ ctx.fillRect(
 canvas.width,
 canvas.height
 );
+
+/* STARS */
+
+for(let i=0;i<80;i++){
+
+ctx.fillStyle =
+"rgba(255,255,255,0.4)";
+
+ctx.beginPath();
+
+ctx.arc(
+
+(i * 40 + Date.now()*0.02 % canvas.width),
+
+(i * 25) % canvas.height,
+
+Math.random()*2,
+
+0,
+
+Math.PI*2
+
+);
+
+ctx.fill();
+
+}
+
+/* CYBER CITY */
+
+for(let i=0;i<12;i++){
+
+const buildingX =
+i * 140 -
+(Date.now()*0.08 % 140);
+
+const buildingHeight =
+180 + Math.sin(i)*80;
+
+const buildingGradient =
+ctx.createLinearGradient(
+0,
+canvas.height - buildingHeight,
+0,
+canvas.height
+);
+
+buildingGradient.addColorStop(
+0,
+"rgba(0,212,255,0.15)"
+);
+
+buildingGradient.addColorStop(
+1,
+"rgba(124,58,237,0.4)"
+);
+
+ctx.fillStyle =
+buildingGradient;
+
+ctx.fillRect(
+
+buildingX,
+
+canvas.height -
+buildingHeight - 80,
+
+90,
+
+buildingHeight
+
+);
+
+/* WINDOWS */
+
+for(let y=0;y<buildingHeight;y+=20){
+
+ctx.fillStyle =
+"rgba(0,212,255,0.4)";
+
+ctx.fillRect(
+
+buildingX + 15,
+
+canvas.height -
+buildingHeight -
+60 + y,
+
+8,
+
+8
+
+);
+
+ctx.fillRect(
+
+buildingX + 45,
+
+canvas.height -
+buildingHeight -
+60 + y,
+
+8,
+
+8
+
+);
+
+}
+
+}
 
 /* GROUND */
 
