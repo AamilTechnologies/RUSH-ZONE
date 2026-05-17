@@ -308,6 +308,12 @@ Math.random()*10 - 5
 
 shake--;
 
+if(shake > 0){
+
+ctx.restore();
+
+}
+
 }
 
 /* BG */
