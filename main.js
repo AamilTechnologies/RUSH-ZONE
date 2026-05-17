@@ -220,6 +220,69 @@ location.reload();
 
 /* UPDATE */
 
+/* PARTICLES */
+
+function createParticles(){
+
+for(let i=0;i<12;i++){
+
+particles.push({
+
+x:player.x + 30,
+
+y:player.y + 70,
+
+size:Math.random()*6 + 2,
+
+speedX:(Math.random()-0.5)*4,
+
+speedY:Math.random()*-3,
+
+life:30
+
+});
+
+}
+
+}
+
+function drawParticles(){
+
+particles.forEach((p,index)=>{
+
+p.x += p.speedX;
+
+p.y += p.speedY;
+
+p.life--;
+
+ctx.fillStyle =
+`rgba(0,212,255,${
+p.life / 30
+})`;
+
+ctx.beginPath();
+
+ctx.arc(
+p.x,
+p.y,
+p.size,
+0,
+Math.PI*2
+);
+
+ctx.fill();
+
+if(p.life <= 0){
+
+particles.splice(index,1);
+
+}
+
+});
+
+}
+
 function update(){
 
 ctx.clearRect(
