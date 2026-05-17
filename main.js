@@ -547,11 +547,22 @@ player.grounded = true;
 
 /* DRAW */
 
+/* DRAW */
+
+createTrail();
+
+drawTrail();
+
+createTrail();
+
+drawTrail();
+
 drawPlayer();
+
+drawObstacles();
 
 drawParticles();
 
-drawObstacles();
 
 requestAnimationFrame(update);
 
