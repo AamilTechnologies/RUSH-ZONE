@@ -1,3 +1,5 @@
+console.log("NEW GAME JS");
+
 const canvas =
 document.getElementById("gameCanvas");
 
