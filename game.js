@@ -588,6 +588,8 @@ function gameOver(){
 
 gameRunning = false;
 
+let shake = 0;
+
 document.getElementById(
 'gameOver'
 ).style.display = 'flex';
